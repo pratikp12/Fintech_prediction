@@ -8,7 +8,7 @@ Directing Customers to subscription products through app behaviour analysis
 3. [Dataset Overview](#dataset)
 4. [Steps](#steps)
 5. [Model Choose](#model)
-6. [Summary](#summary)
+
 <a name="project"></a>
 ## Project Overview
 In today's market, Many companies have a mobile presence.Oftern, these companies provide free products/services in their mobile apps in an attempt to transition their customers to a paid mambership.
@@ -36,27 +36,41 @@ a 24-hour free trial of the premium features, and the company wants totarget the
 <a name="steps"></a>
 ## Steps  
 1. Access, Clean and Analyze Data
+we wil plot histogram to for Univarient analysis
+![](histrogram.png)
+Now we will se correlation with response variable.
+![](correlation.png)
+Correlation Matrix
+![](correlationmatrix.png)
 
 This step involves Data cleaning process and Classification based on different group of users.
-2. Training Data and Models
-In starbuck case, what I like to predict is whether the promotion offer will be efficient for certain users. It is a binary classification problem.
+Our data have Screen features.
+![](datapreview.png)
 
-The target will be the efficient offer.
+As you can see screen_list feature have screen visted by users. We will count which screen are visted by user and put count of visit into different screen column.
+```
+for sc in top_screens:
+    dataset[sc] = dataset.screen_list.str.contains(sc).astype(int)
+    dataset['screen_list'] = dataset.screen_list.str.replace(sc+",", "")
 
-The features to train will be the other features in the data, include the users demographic characteristics and also the offer duration, type, offer channels, etc.
+dataset['Other'] = dataset.screen_list.str.count(",")
+dataset = dataset.drop(columns=['screen_list'])
 
-I defined the dataset as labeled data, so we will use supervised learning models.
-
-What I want to predict is a categorical form, will be YES or NO, 1 or 0.
-The target will be the efficient offer.
-
+```
 <a name="model"></a>
 ## Model Choose
 
 I tried logistic regression model to check which model 
+#### Model Building ####
+
+```
+# Fitting Model to the Training Set
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state = 0, penalty = 'l2')
+classifier.fit(X_train, y_train)
+
+# Predicting Test Set
+y_pred = classifier.predict(X_test)
+```
 
 
-<a name="summary"></a>
-# Summary
-![](data/star1.PNG)
-### 
